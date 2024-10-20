@@ -1,0 +1,11 @@
+[package]
+name = "samples-hello-world"
+authors = ["Gunawan \"chez14\" Christianto <chris@christianto.net>"]
+version = "0.0.0"
+edition = "2021"
+publish=false
+
+[dependencies]
+dotenvy = { workspace = true }
+visa-sdk = { path = "../.." }
+tokio = { workspace = true, features = ["full"] }
