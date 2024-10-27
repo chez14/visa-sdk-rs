@@ -1,7 +1,7 @@
 use super::{
     config::Config,
     mutual_tls::MutualTls,
-    state::{self},
+    utils::MLETrait,
 };
 #[cfg(test)]
 use mockall::mock;
@@ -11,7 +11,7 @@ use mockall::mock;
 #[derive(Debug, Clone)]
 pub struct VisaClient<MLE>
 where
-    MLE: state::MessageLevelEncryptionState + Clone,
+    MLE: MLETrait,
 {
     pub(super) mutual_tls: MutualTls,
     pub(super) message_level_encryption: MLE,
@@ -22,7 +22,7 @@ where
 
 impl<MLE> VisaClient<MLE>
 where
-    MLE: state::MessageLevelEncryptionState + Clone,
+    MLE: MLETrait,
 {
     fn apply_auth(&self, req: reqwest::RequestBuilder) -> reqwest::RequestBuilder {
         req.basic_auth(

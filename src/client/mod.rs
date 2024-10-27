@@ -11,3 +11,5 @@ pub mod builder;
 pub use client::*;
 
 pub use models::*;
+
+pub(crate) mod utils;

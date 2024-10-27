@@ -1,4 +1,4 @@
-use crate::client::{api_level::ApiLevel, state};
+use crate::client::{api_level::ApiLevel, utils::MLETrait};
 use mockall_double::double;
 use reqwest::{Method, Request};
 use url::Url;
@@ -37,7 +37,7 @@ use crate::client::VisaClient;
 #[derive(Clone)]
 pub struct HelloWorld<MLE>
 where
-    MLE: state::MessageLevelEncryptionState + Clone,
+    MLE: MLETrait,
 {
     client: VisaClient<MLE>,
     url: Url,
@@ -45,7 +45,7 @@ where
 
 impl<MLE> HelloWorld<MLE>
 where
-    MLE: state::MessageLevelEncryptionState + Clone,
+    MLE: MLETrait,
 {
     pub fn new(client: VisaClient<MLE>) -> Self {
         let url = Url::parse(match client.get_config().api_level {
