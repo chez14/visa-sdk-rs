@@ -31,17 +31,33 @@ where
         )
     }
 
+    fn apply_message_level_encryption(
+        &self,
+        req: reqwest::RequestBuilder,
+    ) -> reqwest::RequestBuilder {
+        if !self.message_level_encryption.has_mle() {
+            return req;
+        }
+
+        // TODO: implement this
+        req
+    }
+
     pub fn get_config(&self) -> &Config {
         &self.config
     }
 
+    /// Executes a request with the given `reqwest::Request` object. This
+    /// function will apply the necessary authentication and message level
+    /// encryption to the request before sending it.
     pub async fn execute_request(
         &self,
         request: reqwest::Request,
     ) -> Result<reqwest::Response, reqwest::Error> {
         let builder = reqwest::RequestBuilder::from_parts(self._client.clone(), request);
         let authed_request = self.apply_auth(builder);
-        authed_request.send().await
+        let mle_request = self.apply_message_level_encryption(authed_request);
+        mle_request.send().await
     }
 }
 

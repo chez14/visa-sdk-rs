@@ -20,9 +20,18 @@ pub struct WithoutMessageLevelEncryption;
 #[derive(Default, Clone)]
 pub struct WithMessageLevelEncryption(pub(crate) MessageLevelEncryption);
 
-pub trait MessageLevelEncryptionState {}
+pub trait MessageLevelEncryptionState {
+    fn has_mle(&self) -> bool {
+        false
+    }
+}
 impl MessageLevelEncryptionState for WithoutMessageLevelEncryption {}
-impl MessageLevelEncryptionState for WithMessageLevelEncryption {}
+impl MessageLevelEncryptionState for WithMessageLevelEncryption {
+    fn has_mle(&self) -> bool {
+        true
+    }
+}
+
 #[cfg(test)]
 impl MessageLevelEncryptionState for () {}
 // endregion: --- Message Level Encryption ---
