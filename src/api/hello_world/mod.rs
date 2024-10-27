@@ -68,30 +68,46 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use serde_json::json;
     use http::response::Builder as ResponseBuilder;
+    use serde_json::json;
+
+    fn setup_mock_execute_request(
+        mock_client: &mut VisaClient<()>,
+        url: &str,
+        status: u16,
+        body: &str,
+    ) {
+        let response = ResponseBuilder::new()
+            .status(status)
+            .body(body.to_string())
+            .unwrap();
+
+        let url_clone = url.to_string();
+        mock_client
+            .expect_execute_request()
+            .withf(move |request| request.url().as_str() == url_clone)
+            .returning(move |_| Ok(response.clone().into()));
+    }
+
+    fn setup_mock_get_config(mock_client: &mut VisaClient<()>, api_level: ApiLevel) {
+        mock_client
+            .expect_get_config()
+            .return_const(crate::client::config::Config {
+                api_level,
+                ..Default::default()
+            });
+    }
 
     #[tokio::test]
     async fn test_hello_world_get_sandbox() {
         let mut mock_client = VisaClient::<()>::new();
-        let response = ResponseBuilder::new()
-            .status(200)
-            .body(r#"{"message": "Hello, World!"}"#)
-            .unwrap();
-
-        mock_client
-            .expect_execute_request()
-            .withf(|request| {
-                request.url().as_str() == "https://sandbox.api.visa.com/vdp/helloworld"
-            })
-            .returning(move |_| Ok(response.clone().into()));
-
-        mock_client
-            .expect_get_config()
-            .return_const(crate::client::config::Config {
-                api_level: ApiLevel::Sandbox,
-                ..Default::default()
-            });
+        setup_mock_execute_request(
+            &mut mock_client,
+            "https://sandbox.api.visa.com/vdp/helloworld",
+            200,
+            r#"{"message": "Hello, World!"}"#,
+        );
+        setup_mock_get_config(&mut mock_client, ApiLevel::Sandbox);
 
         let hello_world = HelloWorld::new(mock_client);
         let result = hello_world.get().await;
@@ -102,22 +118,13 @@ mod tests {
     #[tokio::test]
     async fn test_hello_world_get_certification() {
         let mut mock_client = VisaClient::<()>::new();
-        let response = ResponseBuilder::new()
-            .status(200)
-            .body(r#"{"message": "Hello, World!"}"#)
-            .unwrap();
-
-        mock_client
-            .expect_execute_request()
-            .withf(|request| request.url().as_str() == "https://cert.api.visa.com/vdp/helloworld")
-            .returning(move |_| Ok(response.clone().into()));
-
-        mock_client
-            .expect_get_config()
-            .return_const(crate::client::config::Config {
-                api_level: ApiLevel::Certification,
-                ..Default::default()
-            });
+        setup_mock_execute_request(
+            &mut mock_client,
+            "https://cert.api.visa.com/vdp/helloworld",
+            200,
+            r#"{"message": "Hello, World!"}"#,
+        );
+        setup_mock_get_config(&mut mock_client, ApiLevel::Certification);
 
         let hello_world = HelloWorld::new(mock_client);
         let result = hello_world.get().await;
@@ -128,22 +135,13 @@ mod tests {
     #[tokio::test]
     async fn test_hello_world_get_production() {
         let mut mock_client = VisaClient::<()>::new();
-        let response = ResponseBuilder::new()
-            .status(200)
-            .body(r#"{"message": "Hello, World!"}"#)
-            .unwrap();
-
-        mock_client
-            .expect_execute_request()
-            .withf(|request| request.url().as_str() == "https://api.visa.com/helloworld")
-            .returning(move |_| Ok(response.clone().into()));
-
-        mock_client
-            .expect_get_config()
-            .return_const(crate::client::config::Config {
-                api_level: ApiLevel::Production,
-                ..Default::default()
-            });
+        setup_mock_execute_request(
+            &mut mock_client,
+            "https://api.visa.com/helloworld",
+            200,
+            r#"{"message": "Hello, World!"}"#,
+        );
+        setup_mock_get_config(&mut mock_client, ApiLevel::Production);
 
         let hello_world = HelloWorld::new(mock_client);
         let result = hello_world.get().await;
