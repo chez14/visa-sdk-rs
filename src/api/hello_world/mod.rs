@@ -48,11 +48,11 @@ where
     MLE: MLETrait,
 {
     pub fn new(client: VisaClient<MLE>) -> Self {
-        let url = Url::parse(match client.get_config().api_level {
-            ApiLevel::Sandbox => "https://sandbox.api.visa.com/vdp/helloworld",
-            ApiLevel::Certification => "https://cert.api.visa.com/vdp/helloworld",
-            ApiLevel::Production => "https://api.visa.com/helloworld",
-        })
+        let base_url = client.get_base_url();
+        let url = match client.get_config().api_level {
+            ApiLevel::Production => base_url.join("/helloworld"),
+            _ => base_url.join("/vdp/helloworld"),
+        }
         .unwrap();
         HelloWorld { client, url }
     }
@@ -70,6 +70,8 @@ mod tests {
     use super::*;
     use http::response::Builder as ResponseBuilder;
     use serde_json::json;
+
+    const MOCK_URL: &str = "https://domain.test";
 
     fn setup_mock_execute_request(
         mock_client: &mut VisaClient<()>,
@@ -96,6 +98,9 @@ mod tests {
                 api_level,
                 ..Default::default()
             });
+        mock_client
+            .expect_get_base_url()
+            .return_const(Url::parse(MOCK_URL).unwrap());
     }
 
     #[tokio::test]
@@ -103,7 +108,7 @@ mod tests {
         let mut mock_client = VisaClient::<()>::new();
         setup_mock_execute_request(
             &mut mock_client,
-            "https://sandbox.api.visa.com/vdp/helloworld",
+            format!("{}/vdp/helloworld", self::MOCK_URL).as_str(),
             200,
             r#"{"message": "Hello, World!"}"#,
         );
@@ -120,7 +125,7 @@ mod tests {
         let mut mock_client = VisaClient::<()>::new();
         setup_mock_execute_request(
             &mut mock_client,
-            "https://cert.api.visa.com/vdp/helloworld",
+            format!("{}/vdp/helloworld", self::MOCK_URL).as_str(),
             200,
             r#"{"message": "Hello, World!"}"#,
         );
@@ -137,7 +142,7 @@ mod tests {
         let mut mock_client = VisaClient::<()>::new();
         setup_mock_execute_request(
             &mut mock_client,
-            "https://api.visa.com/helloworld",
+            format!("{}/helloworld", self::MOCK_URL).as_str(),
             200,
             r#"{"message": "Hello, World!"}"#,
         );

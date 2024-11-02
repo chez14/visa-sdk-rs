@@ -1,10 +1,9 @@
-use super::{
-    config::Config,
-    mutual_tls::MutualTls,
-    utils::MLETrait,
-};
+use crate::api::constants;
+
+use super::{api_level::ApiLevel, config::Config, mutual_tls::MutualTls, utils::MLETrait};
 #[cfg(test)]
 use mockall::mock;
+use url::Url;
 
 // TODO: build documentation for this. TODO: make sure you add an example on how
 // to make a new object in this. Also explain the type states also.
@@ -47,6 +46,14 @@ where
         &self.config
     }
 
+    pub fn get_base_url(&self) -> Url {
+        match self.config.api_level {
+            ApiLevel::Sandbox => constants::VISA_DOMAIN_SANDBOX.clone(),
+            ApiLevel::Certification => constants::VISA_DOMAIN_CERTIFICATION.clone(),
+            ApiLevel::Production => constants::VISA_DOMAIN_PRODUCTION.clone(),
+        }
+    }
+
     /// Executes a request with the given `reqwest::Request` object. This
     /// function will apply the necessary authentication and message level
     /// encryption to the request before sending it.
@@ -64,11 +71,13 @@ where
 #[cfg(test)]
 mock! {
     pub VisaClient<MLE> {
-      pub fn get_config(&self) -> &Config;
-      pub async fn execute_request(
-        &self,
-        request: reqwest::Request,
-    ) -> Result<reqwest::Response, reqwest::Error>  ;
+        pub fn get_config(&self) -> &Config;
+        pub async fn execute_request(
+            &self,
+            request: reqwest::Request,
+        ) -> Result<reqwest::Response, reqwest::Error>;
+
+        pub fn get_base_url(&self) -> Url;
     }
 
     impl<MLE> Clone for VisaClient<MLE> {
