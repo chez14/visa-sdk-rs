@@ -1,7 +1,15 @@
+use derive_builder::Builder;
 
-#[derive(Default, Clone)]
+#[allow(dead_code)] // TODO: Remove this.
+#[derive(Default, Clone, Builder)]
+#[builder(build_fn(error = "crate::utils::BuilderError"))]
 pub struct MessageLevelEncryption {
-    pub client_private_key: String,
-    pub client_private_key_pass: Option<String>,
-    pub server_public_key: String,
+    #[builder(setter(into))]
+    pub(crate) client_private_key: String,
+
+    #[builder(setter(into))]
+    pub(crate) client_private_key_pass: Option<String>,
+
+    #[builder(setter(into))]
+    pub(crate) server_public_key: String,
 }

@@ -16,34 +16,32 @@ use derive_builder::Builder;
 ///
 /// ## Example
 /// ```no_run
-/// use visa_sdk::client::state::MutualTlsBuilder;
+/// use visa_sdk::client::{VisaClientBuilder, models::MutualTlsBuilder};
 /// use visa_sdk::api::hello_world;
 ///
 /// let mtls = MutualTlsBuilder::default()
-///     .user_id("application-id-from-visa".to_string())
-///     .password("super-secret-password-from-visa".to_string())
-///     .cert("--- BEGIN ...".to_string())
-///     .cert_key(Some("super-secret-key".to_string()))
-///     .ca_bundle("your_ca_bundle".to_string())
+///     .user_id("application-id-from-visa")
+///     .password("super-secret-password-from-visa")
+///     .cert("--- BEGIN ...".as_bytes().to_vec())
+///     .cert_key(Some(String::from("super-secret-key")))
 ///     .build()
 ///     .unwrap();
 ///
-/// let client = VisaClient::builder()
+/// let client = VisaClientBuilder::new()
 ///     .set_mutual_tls(mtls)
 ///     .build();
-///
-/// let hello_world = VisaClient::hello_world(false);
-/// let response = hello_world.get();
-/// println!("{:?}", response);
 /// ```
 #[derive(Default, Clone, Debug, Builder)]
+#[builder(build_fn(error = "crate::utils::BuilderError"))]
 pub struct MutualTls {
     /// The user ID to use for the API Client to authenticate. This value is
     /// obtainable in your application dashboard.
+    #[builder(setter(into))]
     pub(crate) user_id: String,
 
     /// The password to use for the API Client to authenticate. This value is
     /// also obtainable in your application dashboard.
+    #[builder(setter(into))]
     pub(crate) password: String,
 
     /// The certificate to use for the client, the certificate content, not the
@@ -55,5 +53,6 @@ pub struct MutualTls {
 
     /// Certificate Passphrase if any. If the certificate is not password
     /// protected, this should be [None].
+    #[builder(setter(into))]
     pub(crate) cert_key: Option<String>,
 }

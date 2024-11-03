@@ -84,7 +84,6 @@
 //! Exchange](https://developer.visa.com/capabilities/foreign_exchange).
 //!
 
-
 use derive_builder::Builder;
 use serde::{Deserialize, Serialize};
 
@@ -97,17 +96,20 @@ use serde::{Deserialize, Serialize};
 /// For more details, visit the [Visa Foreign Exchange API
 /// Documentation](https://developer.visa.com/capabilities/foreign_exchange/reference).
 #[derive(Clone, Debug, Serialize, Deserialize, Builder)]
+#[builder(build_fn(error = "crate::utils::BuilderError"))]
 pub struct FXRequestAorB {
     /// ISO 4217 code of the source currency, as a 3-letter string (e.g.,
     /// "USD").
     ///
     /// Example: `"USD"`
+    #[builder(setter(into))]
     pub source_currency_code: String,
 
     /// ISO 4217 code of the destination currency, as a 3-letter string (e.g.,
     /// "GBP").
     ///
     /// Example: `"GBP"`
+    #[builder(setter(into))]
     pub destination_currency_code: String,
 
     /// The amount to convert from the source currency. This amount includes any
@@ -115,6 +117,7 @@ pub struct FXRequestAorB {
     ///
     /// Format: A decimal with up to 2 digits after the decimal point. Example:
     /// `"100.55"`
+    #[builder(setter(into))]
     pub source_amount: String,
 
     /// Optional FX markup rate to apply. Represents a percentage markup (e.g.,
@@ -136,17 +139,20 @@ pub struct FXRequestAorB {
 /// For further details, consult the [Visa Foreign Exchange API
 /// Documentation](https://developer.visa.com/capabilities/foreign_exchange/reference).
 #[derive(Clone, Debug, Serialize, Deserialize, Builder)]
+#[builder(build_fn(error = "crate::utils::BuilderError"))]
 pub struct FXRequestBankOrWallet {
     /// ISO 4217 code of the source currency, as a 3-letter string (e.g.,
     /// "USD").
     ///
     /// Example: `"USD"`
+    #[builder(setter(into))]
     pub source_currency_code: String,
 
     /// ISO 4217 code of the destination currency, as a 3-letter string (e.g.,
     /// "GBP").
     ///
     /// Example: `"GBP"`
+    #[builder(setter(into))]
     pub destination_currency_code: String,
 
     /// The source amount in the source currency, if known.
@@ -176,6 +182,7 @@ pub struct FXRequestBankOrWallet {
 /// Details about the acquiring institution for requests using rate product
 /// codes A or B.
 #[derive(Clone, Debug, Serialize, Deserialize, Builder)]
+#[builder(build_fn(error = "crate::utils::BuilderError"))]
 pub struct AcquirerDetails {
     /// The Bank Identification Number (BIN) of the acquirer.
     ///
@@ -185,6 +192,7 @@ pub struct AcquirerDetails {
     /// ISO 4217 numeric code of the settlement currency (e.g., "840" for USD).
     ///
     /// Example: `"840"`
+    #[builder(setter(into))]
     pub settlement_currency_code: String,
 }
 
