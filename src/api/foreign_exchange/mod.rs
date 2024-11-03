@@ -33,29 +33,29 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let client = VisaClient::new("api_key", "secret_key");
+//!     let client = VisaClient::new(/* ... */);
 //!     let forex = ForeignExchange::new(client);
 //!
 //!     // Example for FXRequestAorB
 //!     let payload_a_or_b = FXRequestAorBBuilder::default()
-//!         .source_currency_code("USD".to_string())
-//!         .destination_currency_code("GBP".to_string())
-//!         .source_amount("100.55".to_string())
+//!         .source_currency_code("USD")
+//!         .destination_currency_code("GBP")
+//!         .source_amount("100.55")
 //!         .build()
 //!         .expect("Failed to build FXRequestAorB");
-//!     let response_a_or_b = forex.get_a_or_b(payload_a_or_b).await;
+//!     let response_a_or_b = forex.get_a_or_b(payload_a_or_b).await.unwrap();
 //!     println!("{:?}", response_a_or_b);
 //!
 //!     // Example for FXRequestBankOrWallet
 //!     let payload_bank_or_wallet = FXRequestBankOrWalletBuilder::default()
-//!         .source_currency_code("USD".to_string())
-//!         .destination_currency_code("GBP".to_string())
+//!         .source_currency_code("USD")
+//!         .destination_currency_code("GBP")
 //!         .initiating_party_id(1002)
 //!         .source_amount(Some(100.55))
 //!         .quote_id_required(Some(true))
 //!         .build()
 //!         .expect("Failed to build FXRequestBankOrWallet");
-//!     let response_bank_or_wallet = forex.get_bank_or_wallet(payload_bank_or_wallet).await;
+//!     let response_bank_or_wallet = forex.get_bank_or_wallet(payload_bank_or_wallet).await.unwrap();
 //!     println!("{:?}", response_bank_or_wallet);
 //! }
 //! ```

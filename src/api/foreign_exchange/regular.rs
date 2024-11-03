@@ -71,9 +71,9 @@ where
     ///
     /// ```no_run
     /// let payload = FXRequestAorBBuilder::default()
-    ///     .source_currency_code("USD".to_string())
-    ///     .destination_currency_code("GBP".to_string())
-    ///     .source_amount("100.55".to_string())
+    ///     .source_currency_code("USD")
+    ///     .destination_currency_code("GBP")
+    ///     .source_amount("100.55")
     ///     .build()
     ///     .expect("Failed to build FXRequestAorB");
     /// let response = forex.get_a_or_b(payload).await.expect("Failed to get response");
@@ -101,8 +101,8 @@ where
     ///
     /// ```no_run
     /// let payload = FXRequestBankOrWalletBuilder::default()
-    ///     .source_currency_code("USD".to_string())
-    ///     .destination_currency_code("GBP".to_string())
+    ///     .source_currency_code("USD")
+    ///     .destination_currency_code("GBP")
     ///     .initiating_party_id(1002)
     ///     .source_amount(Some(100.55))
     ///     .quote_id_required(Some(true))
