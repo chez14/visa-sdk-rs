@@ -1,7 +1,5 @@
 use super::{
-    api_level::ApiLevel,
-    config::Config,
-    mutual_tls::MutualTls,
+    models::{ApiLevel, Config, MutualTls},
     state::{self, WithMutualTls},
     VisaClient,
 };

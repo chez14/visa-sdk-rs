@@ -28,9 +28,9 @@
 //! - [`WithMessageLevelEncryption`]: Represents the state where Message Level
 //!       Encryption is enabled.
 
-#![allow(unused_imports)] // for documentation purposes.
+use super::models::{MessageLevelEncryption, MutualTls};
+#[allow(unused_imports)] // for documentation purposes.
 use super::VisaClient;
-use super::{message_level_encryption::MessageLevelEncryption, mutual_tls::MutualTls};
 
 // region:    --- Mutual TLS ---
 /// Represents the state where Mutual TLS is not enabled.

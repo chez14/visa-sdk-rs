@@ -1,17 +1,10 @@
-mod client;
-
-mod models;
-
 mod builder;
+mod client;
 
 // TODO: Remove the deadcode disabler.
 #[allow(dead_code)]
 pub mod state;
-
 pub use builder::*;
-
 pub use client::*;
-
-pub use models::*;
-
+pub mod models;
 pub(crate) mod utils;

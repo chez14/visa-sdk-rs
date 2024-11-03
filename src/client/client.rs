@@ -1,6 +1,9 @@
 use crate::api::constants;
 
-use super::{api_level::ApiLevel, config::Config, mutual_tls::MutualTls, utils::MLETrait};
+use super::{
+    models::{ApiLevel, Config, MutualTls},
+    utils::MLETrait,
+};
 #[cfg(test)]
 use mockall::mock;
 use url::Url;

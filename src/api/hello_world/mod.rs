@@ -1,4 +1,4 @@
-use crate::client::{api_level::ApiLevel, utils::MLETrait};
+use crate::client::{models::ApiLevel, utils::MLETrait};
 use mockall_double::double;
 use reqwest::{Method, Request};
 use url::Url;
@@ -94,7 +94,7 @@ mod tests {
     fn setup_mock_get_config(mock_client: &mut VisaClient<()>, api_level: ApiLevel) {
         mock_client
             .expect_get_config()
-            .return_const(crate::client::config::Config {
+            .return_const(crate::client::models::Config {
                 api_level,
                 ..Default::default()
             });
