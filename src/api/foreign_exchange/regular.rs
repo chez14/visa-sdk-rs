@@ -1,6 +1,9 @@
 pub mod models;
 
-use crate::client::{utils::MLETrait, VisaClient};
+use crate::{
+    api::result::Result,
+    client::{utils::MLETrait, VisaClient},
+};
 use models::*;
 use reqwest::{Method, Request};
 use serde_json::json;
@@ -30,24 +33,23 @@ where
         ForeignExchange { client, url }
     }
 
-    pub async fn get_a_or_b(&self, payload: FXRequestAorB) -> FXResponseAorB {
+    pub async fn get_a_or_b(&self, payload: FXRequestAorB) -> Result<FXResponseAorB> {
         let mut request = Request::new(Method::GET, self.url.clone());
         request
             .body_mut()
             .replace(json!(payload).to_string().into());
-        let response = self.client.execute_request(request).await.unwrap();
-        response.json::<FXResponseAorB>().await.unwrap()
+        let response = self.client.execute_request(request).await?;
+        Ok(response.json::<FXResponseAorB>().await?)
     }
-
     pub async fn get_bank_or_wallet(
         &self,
         payload: FXRequestBankOrWallet,
-    ) -> FXResponseBankOrWallet {
+    ) -> Result<FXResponseBankOrWallet> {
         let mut request = Request::new(Method::GET, self.url.clone());
         request
             .body_mut()
             .replace(json!(payload).to_string().into());
-        let response = self.client.execute_request(request).await.unwrap();
-        response.json::<FXResponseBankOrWallet>().await.unwrap()
+        let response = self.client.execute_request(request).await?;
+        Ok(response.json::<FXResponseBankOrWallet>().await?)
     }
 }
