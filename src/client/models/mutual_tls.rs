@@ -1,3 +1,5 @@
+use derive_builder::Builder;
+
 /// Mutual TLS is required by all APIs, as mentioned in the Visa API
 /// Documentation.
 ///
@@ -14,16 +16,17 @@
 ///
 /// ## Example
 /// ```no_run
-/// use visa_sdk::client::state::MutualTls;
+/// use visa_sdk::client::state::MutualTlsBuilder;
 /// use visa_sdk::api::hello_world;
 ///
-/// let mtls = MutualTls {
-///    user_id: "application-id-from-visa-sama".to_string(),
-///   password: "super-secret-password-from-visa-sama".to_string()
-///       cert: "--- BEGIN ...".to_string(),
-///   cert_key: Some("super-secret-key".to_string()),
-///  ca_bundle: "your_ca_bundle".to_string(),
-/// };
+/// let mtls = MutualTlsBuilder::default()
+///     .user_id("application-id-from-visa".to_string())
+///     .password("super-secret-password-from-visa".to_string())
+///     .cert("--- BEGIN ...".to_string())
+///     .cert_key(Some("super-secret-key".to_string()))
+///     .ca_bundle("your_ca_bundle".to_string())
+///     .build()
+///     .unwrap();
 ///
 /// let client = VisaClient::builder()
 ///     .set_mutual_tls(mtls)
@@ -33,24 +36,24 @@
 /// let response = hello_world.get();
 /// println!("{:?}", response);
 /// ```
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, Builder)]
 pub struct MutualTls {
     /// The user ID to use for the API Client to authenticate. This value is
     /// obtainable in your application dashboard.
-    pub user_id: String,
+    pub(crate) user_id: String,
 
     /// The password to use for the API Client to authenticate. This value is
     /// also obtainable in your application dashboard.
-    pub password: String,
+    pub(crate) password: String,
 
     /// The certificate to use for the client, the certificate content, not the
     /// path. Certificate should be in PKCS12 format. This certificate will be
     /// loaded by reqwest's Identity struct.
     ///
     /// See [`reqwest::Identity::from_pkcs12_der`] for more information.
-    pub cert: Vec<u8>,
+    pub(crate) cert: Vec<u8>,
 
     /// Certificate Passphrase if any. If the certificate is not password
     /// protected, this should be [None].
-    pub cert_key: Option<String>,
+    pub(crate) cert_key: Option<String>,
 }

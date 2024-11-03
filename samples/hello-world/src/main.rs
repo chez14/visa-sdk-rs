@@ -1,7 +1,10 @@
 use std::env;
 use visa_sdk::{
     api::hello_world::HelloWorld,
-    client::{builder::VisaClientBuilder, mutual_tls::MutualTls},
+    client::{
+        builder::VisaClientBuilder,
+        mutual_tls::MutualTlsBuilder,
+    },
 };
 
 #[tokio::main]
@@ -14,12 +17,15 @@ async fn main() -> Result<(), ()> {
     let pfx_bytes = std::fs::read(cert_path).unwrap();
 
     let client = VisaClientBuilder::new()
-        .set_mutual_tls(MutualTls {
-            user_id,
-            password,
-            cert: pfx_bytes.to_vec(),
-            cert_key,
-        })
+        .set_mutual_tls(
+            MutualTlsBuilder::default()
+                .user_id(user_id)
+                .password(password)
+                .cert(pfx_bytes)
+                .cert_key(cert_key)
+                .build()
+                .unwrap(),
+        )
         .build();
 
     let hello = HelloWorld::new(client);
