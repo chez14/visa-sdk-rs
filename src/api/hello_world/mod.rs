@@ -1,10 +1,9 @@
+#[double]
+use crate::client::VisaClient;
 use crate::client::{models::ApiLevel, utils::MLETrait};
 use mockall_double::double;
 use reqwest::{Method, Request};
 use url::Url;
-
-#[double]
-use crate::client::VisaClient;
 
 /// Visa API for the HelloWorld endpoint. This API is used to test the
 /// connection to the Visa API in certification and production environments.
