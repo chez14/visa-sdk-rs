@@ -1,10 +1,7 @@
 use std::env;
 use visa_sdk::{
     api::hello_world::HelloWorld,
-    client::{
-        builder::VisaClientBuilder,
-        mutual_tls::MutualTlsBuilder,
-    },
+    client::{mutual_tls::MutualTlsBuilder, VisaClientBuilder},
 };
 
 #[tokio::main]
