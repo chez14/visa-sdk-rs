@@ -1,5 +1,10 @@
 use derive_builder::Builder;
 
+
+/// Message level encryption.
+///
+/// ## Documentation
+/// - <https://developer.visa.com/pages/visa-developer-pki>
 #[allow(dead_code)] // TODO: Remove this.
 #[derive(Default, Clone, Builder)]
 #[builder(build_fn(error = "crate::utils::BuilderError"))]
