@@ -124,9 +124,11 @@ pub struct FXRequestAorB {
     /// "0.07" for 0.07%).
     ///
     /// Example: `"0.07"`
+    #[builder(default)]
     pub markup_rate: Option<String>,
 
     /// Additional information about the acquiring institution.
+    #[builder(default)]
     pub acquirer_details: Option<AcquirerDetails>,
 }
 
@@ -159,12 +161,14 @@ pub struct FXRequestBankOrWallet {
     ///
     /// Format: Decimal with up to 2 digits after the decimal point. Example:
     /// `100.55`
+    #[builder(default)]
     pub source_amount: Option<f64>,
 
     /// The destination amount in the destination currency, if known.
     ///
     /// Format: Decimal with up to 2 digits after the decimal point. Example:
     /// `85.42`
+    #[builder(default)]
     pub destination_amount: Option<f64>,
 
     /// ID assigned by Visa to identify the originating entity.
@@ -176,6 +180,7 @@ pub struct FXRequestBankOrWallet {
     /// future transactions.
     ///
     /// Example: `true`
+    #[builder(default)]
     pub quote_id_required: Option<bool>,
 }
 
@@ -210,7 +215,7 @@ pub struct AcquirerDetails {
 ///     "original_destn_amt_before_mark_up": "81.16"
 /// }
 /// ```
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct FXResponseAorB {
     /// Conversion rate applied to the transaction, excluding any markup.
     ///
@@ -249,7 +254,7 @@ pub struct FXResponseAorB {
 ///     "quote_id_expiry_datetime": "2024-01-08T10:22:15.529+00:00"
 /// }
 /// ```
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct FXResponseBankOrWallet {
     /// Conversion rate applied to convert the source amount to the destination
     /// amount.
